@@ -1,6 +1,6 @@
-## ���� Ž��
+## 선형 탐색
 
-#### Ǯ��
+#### 풀이
 
 ```c++
 #include <bits/stdc++.h>
@@ -35,9 +35,9 @@ int main()
 }
 ```
 
-## ����Ž��
+## 이진탐색
 
-#### Ǯ��
+#### 풀이
 
 ```c++
 #include <bits/stdc++.h>
@@ -77,13 +77,13 @@ int main()
         cin >> temp;
         Ns.push_back(temp);
     }
-    sort(Ns.begin(), Ns.end()); // std::sort, vector�� begin, end�� ���ڷ�
+    sort(Ns.begin(), Ns.end()); // std::sort, vector의 begin, end를 인자로
     cin >> M;
     int exist = 0;
     for (int i = 0; i < M; i++)
     {
         cin >> temp;
-        exist = binary_search(Ns, temp); // �����ϸ� 1 ��ȯ
+        exist = binary_search(Ns, temp); // 존재하면 1 반환
         Ms.push_back(exist);
         exist = 0;
     }
@@ -95,7 +95,7 @@ int main()
 }
 ```
 
-#### quick sort�� �̿��� Ǯ��
+#### quick sort를 이용한 풀이
 
 ```c++
 #include <bits/stdc++.h>
@@ -134,7 +134,7 @@ void quick_sort(vector<int> &V, int start, int end)
 
 	if (start < end)
 	{
-		partition(V, start, end, pivot); // pivot �������� �κ� ����Ʈ�� ����
+		partition(V, start, end, pivot); // pivot 기준으로 부분 리스트를 나눔
 		if (pivot != start)
 			quick_sort(V, start, pivot - 1);
 		if (pivot != end)
@@ -192,3 +192,118 @@ int main()
 	return (0);
 }
 ```
+
+### 예산
+> 이진 탐색을 통해서 정확한 값 뿐만 아니라 최소 또는 최대값을 찾을 때도 사용할 수 있다는 것을 알게된 문제였다.
+
+```c++
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+void binary_max(vector<int> &V, int M, long long &max)
+{
+	long long start, end;
+	long long mid;
+	long long sum;
+
+	max = 0;
+	sum = 0;
+	start = 1;
+	end = *(V.end() - 1);
+	while (start <= end)
+	{
+		mid = (start + end) / 2;
+		for (unsigned int i = 0; i < V.size(); i++)
+		{
+			if (V[i] <= mid)
+				sum += V[i];
+			else
+			{
+				sum += mid;
+			}
+		}
+		if (sum == M)
+		{
+			max = mid;
+			return ;
+		}
+		else if (sum > M)
+		{
+			end = mid - 1;
+		}
+		else if (sum < M)
+		{
+			start = mid + 1;
+			if (max < mid)
+				max = mid;
+		}
+		sum = 0;
+	}
+}
+
+int solution(vector<int> budgets, int M) {
+    long long answer = 0;
+    sort(budgets.begin(), budgets.end());
+    for (unsigned int i = 0; i < budgets.size(); i++)
+    {
+        answer += budgets[i];
+    }
+    if (answer <= M)
+        return *(budgets.end() - 1);
+    else
+        answer = 0;
+	binary_max(budgets, M, answer);
+    return answer;
+}
+```
+
+### 입국심사
+> 최소를 정하기 위한 검사 방법이 생각이 안나서 참고 했는데 직접 모두 생각해내기는 어려웠을 것 같다.
+
+```c++
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+void binary_min(vector<int> &V, int n, long long &min)
+{
+	long long start, end;
+	long long mid;
+	long long sum;
+
+	sum = 0;
+	start = 1;
+	end = (long long)(*(V.end() - 1)) * n;
+	min = end;
+	while (start <= end)
+	{
+		sum = 0;
+		mid = (start + end) / 2;
+		for (unsigned int i = 0; i < V.size(); i++)
+		{
+			sum += mid / V[i];
+		}
+		if (sum < n)
+			start = mid + 1;
+		else if (sum >= n)
+		{
+			if (mid < min)
+				min = mid;
+			end = mid - 1;
+		}
+	}
+}
+
+long long solution(int n, vector<int> times) {
+    long long answer = 0;
+	sort(times.begin(), times.end());
+	binary_min(times, n, answer);
+    return answer;
+}
+```
+
