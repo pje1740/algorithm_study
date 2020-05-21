@@ -95,3 +95,41 @@ https://blog.naver.com/occidere/221364545507
 예산 배열을 오름차순으로 정렬할 뒤 이진 탐색을 활용하게 된다. 최소 예산 0과 최대 예산을 M으로 잡고 ({0, 0, 0, M} 이런 형식도 있을 수 있으니) 이 둘의 평균과 하나하나 비교하게 된다. 이 평균은 이진 탐색의 원리에 의해 계속 조금씩 변경되는데 이러다보면 적정선을 찾을 수 있다. 원리는 이 평균값이 우리가 원하는 값이라고 생각하고 계산을 해보고, 그렇게 했을 때 예산이 초과하면 평균을 줄이고(최대 예산을 평균으로 변경) 예산이 남으면 평균을 늘린다(최소 예산을 평균보다 1 크게).
 
 배열을 돌면서 평균보다 작은 값은 그 값을 그대로 total에 더하고, 평균보다 크면 평균을 total에 더한다. 이렇게 구해진 total과 M을 비교하면 된다. 
+
+
+
+### 입국심사
+
+```java
+import java.util.*;
+
+public class Solution {
+    public long solution(int n, int[] times) {
+    	Arrays.sort(times);
+    	long low = 0;
+    	long max = (long)times[times.length - 1] * n;
+    	long answer = Long.MAX_VALUE;
+
+    	while (low <= max) {
+    		long mid = (max + low) / 2;
+    		long ppl_sum = 0;
+    		
+    		for (int time : times) {
+    			ppl_sum += (mid / time);
+    		}
+    		
+    		if (ppl_sum < n) {
+    			low = mid + 1;  
+    		}
+    		else {
+                if (mid < answer) {
+                    answer = mid;
+                }
+				max = mid - 1;
+    		}
+    	}
+        return answer;
+    }
+}
+```
+
