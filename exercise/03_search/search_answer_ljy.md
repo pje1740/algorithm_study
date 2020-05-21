@@ -85,3 +85,67 @@ function solution(n, times) {
 
 ```
 
+------
+
+
+
+# 🎯 이진탐색 - 수 찾기 (백준 1920번)
+
+- 계속 시간 초과가 뜨길래 다른 통과예제들을 살펴봤더니 input을 여러줄 받아오고, 특정 라인을 배열로 split할 때 마지막에 map함수를 이용해서 전처리를 해줘야 초과가 뜨지 않았다.
+
+```javascript
+let fs = require('fs');
+let input = fs.readFileSync('dev/stdin').toString().trim().split('\n');
+const dest = input[1].split(' ').map(val => +val).sort((a, b) => a - b);
+const src = input[3].split(' ').map(val => +val);
+src.forEach (val => {
+	let left = 0;
+	let right = dest.length - 1;
+	let mid;
+	let answer = 0;
+	while (left <= right) {
+		mid = Math.floor((left + right)/2);
+		if (dest[mid] > val) {
+			right = mid-1;
+		} else if (dest[mid] < val) {
+			left = mid+1;
+		} else {
+			answer = 1;
+			break ;
+		}
+	}
+	console.log(answer);
+})
+
+```
+
+------
+
+
+
+# 🎯 이진탐색 - 예산
+
+```javascript
+function solution(budgets, M) {
+    let left = 0;
+    let right = Math.max.apply(null, budgets);
+    let answer = left;
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        let sum = 0;
+        budgets.forEach(val => {
+            sum += (val > mid) ? mid : val;
+        })
+        if (sum <= M) {
+            if (answer < mid) {
+                answer = mid;
+            }
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return answer;
+}
+```
+
