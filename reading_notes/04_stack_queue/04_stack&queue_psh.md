@@ -134,6 +134,38 @@ public class IntStack {
 
 배열의 처음과 끝이 연결되었다고 보는 자료구조. 여기서 논리적으로 어떤 요소가 첫 번째 요소이고 어떤 요소가 마지막 요소인지 식별하기 위한 변수가 프런트와 리어. 꼭 0번이 시작이 아니라, 무언가 빠지면 프런트의 인덱스 번호를 하나 뒤로 이동시키고, 리어도 무언가 들어올 때마다 하나씩 증가하는 개념. 
 
+링 버퍼는 오래된 데이터를 버리는 용도로 사용도 가능하다. 요소가 n개인 배열이라면 가장 최근 입력한 n개까지만 저장하는 것.
+
+```java
+class LastNElements{
+  public static void main(String[] args) {
+    Scanner stdIn = new Scanner(System.in);
+    final int N = 10;
+    int[] a = new int[N];
+    int cnt = 0;
+    int retry;
+    
+    System.out.println("정수를 입력하시오.");
+    
+    do {
+      System.out.printf("%d번째 정수:", cnt + 1);
+      a[cnt++ % N] = stdIn.nextInt();
+      
+      System.out.print("계속 할까요? (예.1/아니오.0) :");
+      retry = stdIn.nextInt();
+    } while (retry == 1);
+    
+    int i = cnt - N;
+    if (i < 0) i = 0;
+    
+    for (; i < cnt; i++)
+      System.out.printf("%d번째의 정수 = %d\n", i + 1, a[i % N]);
+  }
+}
+```
+
+
+
 ### 큐 클래스 IntQueue
 
 ```java
@@ -177,8 +209,16 @@ public class IntQueue {
 #### 메서드
 
 - 인큐 메서드 enque: 큐에 데이터를 인큐하는 메서드. 성공하면 인큐한 값을 그대로 반환한다. 
+- 디큐 메서드 deque: 큐의 데이터를 디큐하는 메서드. 성공하면 디큐한 값을 그대로 반환한다. 
 
-
+- 피크 peek 메서드: 맨 위의 값을 확인한다. (que[front])
+- 검색 index Of 메서드: 특정 값이 스택 배열에 있는지 검색. 스캔의 시작은 인덱스 0이 아닌 front부터. 없거나 검색 실패 시 -1을 반환한다. 동일한 값이 여러개라면 가장 위의 것을 반환한다. 
+- 삭제 clear 메서드: 스택에 쌓여있는 모든 데이터를 삭제
+- 용량 capacity 확인 메서드: 스택의 max를 반환하는 메서드
+- 데이터 수 size 확인 메서드: 현재 스택에 쌓여 있는 데이터 수 ptr을 반환하는 메서드
+- 스택이 비어 있는지 검사하는 메서드 IsEmpty: 스택이 비어있는지를 boolean으로 반환
+- 스택이 가득 찼는지 검사하는 메서드 IsFull: 스택이 가득 찼는지 booelan으로 반환
+- 모든 데이터를 표시하는 dump 메서드: 바닥에서 꼭대기 순으로 데이터를 표시하는 메서드
 
 
 
