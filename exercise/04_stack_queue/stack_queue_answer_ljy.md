@@ -1,3 +1,76 @@
+# 🎯 스택 - 후위 표기식 ( ᐛ )و
+
+#### 문제의 주요 로직
+
+1. 평소에는 스텍에 부호들을 담아놨다가, **어떤 조건**에 맞으면 마지막에 들어온 순서대로 `pop()`한다.
+2. 이 때, **조건**이란 지금 대상인 문자의 우선순위보다 스택 안에 들어있는 부호의 우선순위가 클 때.
+3. 참고로 괄호의 경우 ')'를 만나면 스택 안에 '('가 빠져나올 때까지 부호를 `pop()`한다.
+
+#### 그래서 이걸 왜 스택으로?
+
+1. `(a - b) * c`  라는 수식의 경우 후위표기식으로 나타내면 `abc*-` 이다.
+2. 즉, for문들 돌며 부호를 배열에 넣었을 때, 먼저 들어간 `-`보다 나중에 들어간 `*`가 문자열의 앞에 위치한다.
+3. 따라서 후입선출이 특징인 스택을 사용하는 것이 더 효율적이다.
+
+```javascript
+let fs = require('fs');
+let input = fs.readFileSync('dev/stdin').toString().trim().split('');
+function checkSign(value){
+	switch(value) {
+		case '*' :
+		case '/' :
+			return 2;
+		case '+' :
+		case '-' :
+			return 1;
+		case '(' :
+		case ')' :
+			return 0;
+		default:
+			return -1;
+	}
+}
+let stack = [];
+let answer = [];
+input.forEach(val => {
+	switch(val) {
+		case '*' :
+		case '/' :
+		case '+' :
+		case '-' :
+			while (stack.length!=0 && checkSign(stack[stack.length - 1]) >= checkSign(val)){
+				answer.push(stack.pop());
+			}
+			stack.push(val);
+			break;
+		case '(' :
+			stack.push(val);
+			break;
+		case ')' :
+			while (stack.length!=0 && stack[stack.length - 1] != '('){
+				answer.push(stack.pop());
+			}
+			stack.pop();
+			break;
+		default:
+			answer.push(val);
+	}
+})
+while (stack.length!=0){
+	answer.push(stack.pop());
+}
+console.log(answer.join(''));
+
+```
+
+
+
+
+
+------
+
+
+
 # 🎯 큐 - 다리를 지나는 트럭 ( ᐛ )و
 
 - 많이 더러운데...줄일 수 있을 것 같으면서도 건들 수 없다.
@@ -49,9 +122,5 @@ function solution(bridge_length, weight, truck_weights) {
     return (time + bridge_length);
 }
 ```
-
-
-
-------
 
 
