@@ -65,8 +65,6 @@ console.log(answer.join(''));
 
 
 
-
-
 ------
 
 
@@ -124,3 +122,116 @@ function solution(bridge_length, weight, truck_weights) {
 ```
 
 
+
+
+
+# 🎯 스택 - baseball player
+
+```javascript
+var calPoints = function(ops) {
+    let stack = [];
+    let answer = 0;
+    ops.forEach(val => {
+        switch(val) {
+            case 'C' :
+                stack.pop();
+                break;
+            case 'D' :
+                stack.push(Number(stack[stack.length -1]) * 2);
+                break;
+            case '+' :
+                stack.push(Number(stack[stack.length -1]) + Number(stack[stack.length -2]));
+                break;
+            default :
+                stack.push(Number(val));
+        }
+        console.log(stack);
+    })
+    stack.forEach(val => {
+        answer += Number(val);
+    })
+    return (answer);
+};
+```
+
+
+
+# 🎯 큐 - 프린터
+```javascript
+function solution(priorities, location) {
+    let answer = 0;
+    let queue = [];
+    let count = 0;
+    for (let i = 0; i < priorities.length; i++) {
+        queue.push({idx : i, data : priorities[i]})
+    }
+    let max = priorities.sort((a, b) => b - a);
+    while (1) {
+        while (queue[0].data != priorities[0]) {
+            queue.push(queue.shift());
+        }
+        count++;
+        if (queue[0].idx == location) {
+            answer = count;
+            break ;
+        }
+        queue.shift();
+        priorities.shift();
+    }
+    return answer;
+}
+```
+
+
+
+# 🎯 스택 - 탑
+
+```javascript
+function solution(heights) {
+    let answer = [];
+    let stack = heights.slice(0);
+    for (let i = stack.length -1; i >= 0; i--) {
+        let j;
+        for (j = i - 1; j >= 0; j--) {
+            if (stack[j] > stack[i]) {
+                answer.unshift(j + 1);
+                break ;
+            }
+        }
+        if (j == -1) answer.unshift(0);
+    }
+    return answer;
+}
+```
+
+
+
+# 🎯 큐 - 기능 개발
+
+```javascript
+function solution(progresses, speeds) {
+    let answer = [];
+    let queue = [];
+    let count = 0;
+    progresses.forEach(val => {
+        queue.push(val);
+    })
+    while(1) {
+        for (let idx in queue) {
+            queue[idx] += speeds[idx];
+        }
+        if (queue[0] >= 100) {
+            while (queue[0] >= 100) {
+                queue.shift();
+                speeds.shift();
+                count++;
+            }
+            answer.push(count);
+            count = 0;
+        }
+        if (queue.length == 0)
+            break ;
+    }
+    return answer;
+}
+```
