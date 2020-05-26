@@ -256,3 +256,58 @@ public class Solution {
 }
 ```
 
+
+
+### 큐: 다리를 지나는 트럭
+
+```java
+import java.util.*;
+
+public class Solution {
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+    	Queue<Truck> truck_que = new LinkedList<Truck>();
+    	Queue<Integer> truck_left = new LinkedList<Integer>();
+    	int total_weight = 0;
+    	int second = 1;
+    	
+    	for (int i = 0; i < truck_weights.length; i++) {
+    		truck_left.add(truck_weights[i]);
+    	}
+    	
+    	while (true) {
+    		// 통과한 트럭 제거 
+    		if (!truck_que.isEmpty() && truck_que.peek().distance >= bridge_length) {
+    			total_weight -= truck_que.poll().weight;
+    		}
+    		
+    		// 대기 중 트럭 투입 
+    		if (!truck_left.isEmpty() && total_weight + truck_left.peek() <= weight) {
+    			int temp = truck_left.poll();
+    			truck_que.add(new Truck(temp));
+    			total_weight += temp;
+    		}
+    		
+    		if (truck_que.isEmpty() && truck_left.isEmpty())
+    			return second;
+    		
+    		for (Truck truck: truck_que) {
+    			truck.distance++;
+    		}
+    		
+    		second++;
+    	}
+    	
+//        return second;
+    }
+    
+    public class Truck {
+    	int weight;
+    	int distance = 0;
+    	
+    	public Truck(int weight) {
+    		this.weight = weight;
+    	}
+    }
+}
+```
+
