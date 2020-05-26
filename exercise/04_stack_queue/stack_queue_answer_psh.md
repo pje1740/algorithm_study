@@ -111,3 +111,148 @@ class Solution {
 }
 ```
 
+
+
+### 스택: 후위 표기식
+
+```java
+package binary_dhk;
+import java.util.*;
+
+public class Main {
+	
+	private String change(String str) {
+		Stack<Character> stack = new Stack<Character>();
+		
+		ArrayList<Character> changed = new ArrayList<Character>();
+		
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+			int pri = check_priority(ch);
+			
+			switch (ch) {
+				case '+':
+				case '-':
+				case '*':
+				case '/':
+					while (!stack.isEmpty()) {
+						int stack_pri = check_priority(stack.peek());
+						// stack.peek가 현재 연산자보다 우선순위가 같거나 크면 앞에부터 출력.
+						if (stack_pri <= pri)
+							changed.add(stack.pop());
+						else {
+							stack.push(ch);
+							break;
+						}
+					}
+					if (stack.isEmpty()) {
+						stack.push(ch);
+						break;
+					}
+					break;
+				case '(':
+					stack.push(ch);
+					break;
+				case ')':
+					while (stack.peek() != '(') {
+						changed.add(stack.pop());
+					}
+					stack.pop();
+					break;
+				default:
+					changed.add(ch);
+			}
+		}
+		while (!stack.isEmpty())
+			changed.add(stack.pop());
+	    StringBuilder builder = new StringBuilder(changed.size());
+	    for(Character ch: changed)
+	    {
+	        builder.append(ch);
+	    }
+		
+		return builder.toString();
+	}
+	
+	private int check_priority(char ch) {
+		switch (ch) {
+		case '-':
+		case '+':
+			return 1;
+		case '*':
+		case '/':
+			return 0;
+		case '(':
+		case ')':
+			return 2;
+		}
+		return -1;
+	}
+	
+	public static void main(String[] args) {
+		Scanner stdIn = new Scanner(System.in);
+		String str = stdIn.nextLine();
+
+		System.out.println(new Main().change(str));
+	}
+}
+```
+
+
+
+### 큐: 기능개발
+
+조금 지저분하게 풀어서 다시 다른 코드를 보면서 풀어봐야 할듯!
+
+```
+package queue_develop_kdh;
+
+import java.util.*;
+
+public class Solution {
+    public int[] solution(int[] progresses, int[] speeds) {
+    	ArrayList<Integer> result = new ArrayList<Integer>();
+    	Queue<Integer> que = new LinkedList<Integer>();
+    	
+    	for (int progress: progresses)
+    	{
+    		que.add(progress);
+    	}
+
+    	int total_count = 0;
+    	while (!que.isEmpty())
+    	{
+    		Queue<Integer> que_copy = que;
+    		que = new LinkedList<Integer>();
+    		int size = que_copy.size();
+    		for (int i = 0; i < size; i++) {
+    			que.add(que_copy.poll() + speeds[i + total_count]);
+    		}
+    		
+    		int count = 0;
+    		while (!que.isEmpty() && que.peek() >= 100) {
+    			que.poll();
+    			count++;
+    			total_count++;
+    		}
+    		if (count > 0)
+    			result.add(count);
+    	}
+    	
+    	int[] answer = new int[result.size()];
+    	for (int j = 0; j < result.size(); j++) {
+    		answer[j] = result.get(j).intValue();
+    	}
+    	
+    	return answer;
+    }
+    
+    public static void main(String[] args) {
+		int[] progresses = {93, 30, 55};
+		int[] speeds = {1, 30, 5};
+		
+		System.out.println(Arrays.toString(new Solution().solution(progresses, speeds)));
+	}
+}
+```
+
