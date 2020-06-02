@@ -79,3 +79,98 @@ function solution(p) {
 }
 ```
 
+
+
+# 🎯 재귀 : Power of Three
+
+https://leetcode.com/problems/power-of-three/submissions/
+
+
+
+```javascript
+var isPowerOfThree = function(n) {
+    if (n == 1)
+        return true;
+    if (n == 0 || n % 3 > 0)
+        return false;
+    else
+        return isPowerOfThree(n / 3);
+};
+```
+
+
+
+# 🎯 재귀 : Z
+
+```javascript
+let ans = 0;
+function recur(begin, target, words, num, min, hasChecked) {
+    for (let i = 0; i < words.length; i++) {
+        if (begin == target) {
+            if (ans == 0 || num < ans)
+                ans = num;
+        }
+        let isIN = 0;
+        for (let k = 0; k < num; k++) {
+            if (hasChecked[k] == words[i]) {
+                isIN = 1;
+            }
+        }
+        if (isIN == 0) {
+            let count = 0;
+            for (let j = 0; j < begin.length; j++) {
+                if (begin[j] == words[i][j])
+                    count++;
+            }
+            if (count >= begin.length -1) {
+                hasChecked.push(words[i]);
+                recur(words[i], target, words, num + 1, min, hasChecked);
+            }
+        }
+    }
+}
+function solution(begin, target, words) {
+    var answer = 0;
+    var hasChecked = []
+    if (words.indexOf(target) == -1)
+        return answer;
+    else {
+        recur(begin, target, words, 0, 0, hasChecked);
+        answer = ans;
+    }
+    return answer;
+}
+```
+
+
+
+# 🎯 재귀 : 괄호 변환
+
+```javascript
+let fs = require('fs');
+	let input = fs.readFileSync('dev/stdin').toString().trim().split(' ');
+	let power = input[0];
+	let x = input[1];
+	let y = input[2];
+	let answer = 0;
+	function recur(power, x, y) {
+		if (power == 0)
+			return answer;
+		let num = Math.pow(2, power);
+		let sum = num * num;
+		let half = num /2;
+		let section = 0;
+		if (x >= half && y >= half) {
+			section = 3;
+		} else if (x >= half && y < half) {
+			section = 2;
+		} else if (x < half && y >= half) {
+			section = 1;
+		}
+		answer += (sum / 4) * (section);
+		recur(power - 1, x % half, y % half);
+	}
+	recur(power, x, y);
+	console.log(answer);
+```
+
