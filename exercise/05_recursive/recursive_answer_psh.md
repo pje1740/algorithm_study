@@ -95,3 +95,165 @@ public class Solution {
 ```
 
 따지고보면 단순한 문제였는데 재귀문 진입 전에 값을 대입시켜버리는 것 때문에 많이 꼬였었다. 또, 단어가 꼭 3글자가 아님에도 처음에 is_changeable에 문자가 2개가 같을 경우로 설정하는 바람에 테스트케이스 3, 4번이 자꾸 틀렸다고 나왔다. 
+
+
+
+# 괄호변환
+
+```java
+import java.util.*;
+public class Solution {
+	String result = "";
+	
+	public boolean is_ordered(Queue<Character> que) {
+		int left_count = 0;
+		int right_count = 0;
+		
+		while (!que.isEmpty()) {
+			Character temp = que.poll();
+			if (temp == ')')
+				right_count++;
+			else if (temp == '(')
+				left_count++;
+			
+			if (right_count > left_count)
+				return false;
+		}
+		return true;
+	}
+	
+    public String solution(String p) {
+    	if (p.equals(""))
+    		return result;
+
+    	Queue<Character> que = new LinkedList<Character>();
+    	
+    	int left_count = 0;
+    	int right_count = 0;
+    	
+    	int i = 0;
+    	for (; i < p.length(); i++) {
+    		if (p.charAt(i) == '(')
+    			left_count++;
+    		else
+    			right_count++;
+    		que.add(p.charAt(i));
+    		if (left_count == right_count)
+    			break;
+    	}
+    	// i까지가 u라서 i+1부터가 v
+    	i++;
+    	
+    	if (is_ordered(que)) {
+    		result += p.substring(0, i);
+    		return solution(p.substring(i));
+    	}
+    	else {
+    		result += "(";
+    		solution(p.substring(i));
+    		result += ")";
+    		String new_u = p.substring(1, i - 1);
+    		for (int j = 0; j < new_u.length(); j++) {
+    			if (new_u.charAt(j) == '(')
+    				result += ")";
+    			else if (new_u.charAt(j) == ')')
+    				result += "(";
+    		}
+    		return result;
+    	}
+    }
+```
+
+
+
+# Power of Three
+
+```java
+public class Solution {
+	
+    public boolean isPowerOfThree(int n) {
+    	if (n == 1)
+    		return true;
+    	if (n % 3 != 0 || n <= 0)
+        	return false;
+    	return isPowerOfThree(n / 3);
+    }
+	
+	public static void main(String[] args) {
+		System.out.println(new Solution().isPowerOfThree(0));
+	}
+}
+```
+
+
+
+# Z
+
+```java
+import java.util.*;
+
+public class Main {
+	static int count = 0;
+	static boolean is_found = false;
+
+	public void find(int n, int row, int col, int[] answer) {
+		if (is_found)
+			return;
+		if (n == 1) {
+			if (answer[0] == 0 && answer[1] == 0) {
+				count = count + 0;
+				is_found = true;
+				return;
+			}
+			else if (answer[0] == 0 && answer[1] == 1) {
+				count = count + 1;
+				is_found = true;
+				return;
+			}
+			else if (answer[0] == 1 && answer[1] == 0) {
+				count = count + 2;
+				is_found = true;
+				return;
+			}
+			else if (answer[0] == 1 && answer[1] == 1) {
+				count = count + 3;
+				is_found = true;
+				return;
+			}
+		}
+		else {
+			int divider = (int) Math.pow(2, n - 1);
+			int block_size = (int) Math.pow(divider, 2);
+			int new_row = ((int)(answer[0] / divider));
+			int new_col = ((int)(answer[1] / divider));
+			
+			if (new_row == 0 && new_col == 1)
+				count = count + block_size;
+			else if (new_row == 1 && new_col == 0)
+				count = count + block_size * 2;
+			else if (new_row == 1 && new_col == 1)
+				count = count + block_size * 3;
+			
+			answer[0] -= new_row * divider;
+			answer[1] -= new_col * divider;
+			find(n - 1, new_row * divider, new_col * divider, answer);
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner stdin = new Scanner(System.in);
+		int n = stdin.nextInt();
+		int[] answer = new int[2];
+		
+		for (int i = 0; i < 2; i++) {
+			answer[i] = stdin.nextInt();
+		}
+		
+		Main ans = new Main();
+		ans.find(n, 0, 0, answer);
+		
+		System.out.println(ans.count);
+	}
+}
+```
+
