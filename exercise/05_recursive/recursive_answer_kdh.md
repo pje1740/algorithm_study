@@ -334,6 +334,80 @@ int main()
 }
 ```
 
+재귀 함수 구조를 조금 바꾼 코드이다
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+int minimum = -1;
+stack<string> s;
+
+bool is_convertable(string from, string to)
+{
+	int diff = 0;
+	if (from.compare(to) == 0)
+		return false;
+	for (int i = 0; i < from.size(); i++)
+	{
+		if (from[i] != to[i])
+		{
+			if (diff == 0)
+				diff = 1;
+			else
+				return false;
+		}
+	}
+	return true;
+}
+
+void find_min(vector<int> visited, vector<string> words, string from, string target, int cnt)
+{
+	for (int i = 0; i < words.size(); i++)
+	{
+		if (from.compare(words[i]) != 0 && visited[i] == 0 && is_convertable(from, words[i]))
+		{
+			s.push(words[i]);
+			visited[i] = 1;
+		}
+	}
+	from = s.top();
+	s.pop();
+	cnt++;
+	if (from.compare(target) == 0)
+	{
+		if (minimum == -1)
+		{
+			minimum = cnt;
+		}
+		else
+			minimum = min(minimum, cnt);
+		return ;
+	}
+	find_min(visited, words, from, target, cnt);
+}
+
+int solution(string begin, string target, vector<string> words) {
+	vector<int> visited(words.size(), 0);
+    int answer = 0;
+	int cnt = 0;
+	bool is_exist = 0;
+
+	for (auto t: words)
+	{
+		if (t == target)
+		{
+			is_exist = true;
+			break ;
+		}
+	}
+	if (!is_exist)
+		return answer;
+	find_min(visited, words, begin, target, cnt);
+	answer = minimum;
+    return answer;
+}
+```
+
 #### 괄호 변환
 
 재귀 알고리즘을 구현하는데는 문제가 없는데 문제 자체의 이해가 조금 어려운 부분이있다.
