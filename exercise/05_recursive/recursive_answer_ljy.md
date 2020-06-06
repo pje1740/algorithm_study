@@ -102,6 +102,8 @@ var isPowerOfThree = function(n) {
 
 # 🎯 재귀 : Z
 
+https://www.acmicpc.net/problem/1074
+
 ```javascript
 let ans = 0;
 function recur(begin, target, words, num, min, hasChecked) {
@@ -144,7 +146,9 @@ function solution(begin, target, words) {
 
 
 
-# 🎯 재귀 : 괄호 변환
+# 🎯 재귀 : (DFS/BFS) 단어 변환
+
+https://programmers.co.kr/learn/courses/30/lessons/43163
 
 ```javascript
 let fs = require('fs');
