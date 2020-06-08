@@ -262,6 +262,13 @@ console.log(shellSort(arr, 7));
 
 
 
+#### POINT
+
+- 시간 복잡도 : O(n log n) 
+- 최악의 시간 복잡도 : O(n²)
+
+
+
 ```javascript
 const swap = (arr, a, b) => {
 	let tmp = arr[a];
@@ -293,15 +300,144 @@ console.log(quickSort(arr, 0, 8));
 
 
 
+## 06-7. 병합 정렬
+
+> 배열을 앞부분과 뒷부분으로 나누어 각각 정렬한 다음 병합하는 작업을 반복하여 정렬을 수행하는 알고리즘
+>
 
 
 
+#### POINT
+
+- 시간 복잡도 : O(n log n) 
 
 
 
+```javascript
+let buff = [];
+
+const __mergeSort = (arr, left, right) => {
+	if (left < right) {
+		let i;
+		let center = Math.floor((left + right) / 2);
+		let p = 0;
+		let j = 0;
+		let k = left;
+
+		__mergeSort(arr, left, center);
+		__mergeSort(arr, center + 1, right);
+
+		for (i = left; i <= center; i++)
+			buff[p++] = arr[i];
+		while (i <= right && j < p)
+			arr[k++] = (buff[j] <= arr[i]) ? buff[j++] : arr[i++];
+		while (j < p)
+			arr[k++] = buff[j++];
+	}
+}
+
+const mergeSort = (arr, num) => {
+	__mergeSort(arr, 0, num - 1);
+	buff = null;
+}
+
+let arr = [1, 7, 3, 9, 2, 5, 8];
+mergeSort(arr, 7)
+console.log(arr);
+// [ 1, 2, 3, 5, 7, 8, 9 ]
+
+```
 
 
 
+## 06-8. 힙 정렬
+
+> 선택 정렬을 응용한 알고리즘
 
 
+
+#### POINT
+
+- 힙 : '부모의 값이 자식의 값보다 항상 크다'는 조건을 만족하는 완전이진트리. (부모의 값이 자식보다 항상 작아도 힙.)
+- 시간 복잡도 : O(n log n) 
+
+
+
+#### 힙 관계
+
+- 부모는 a[(i - 1) / 2]
+- 왼쪽 자식은 a[i * 2 + 1]
+- 오른쪽 자식은 a[i * 2 + 2]
+
+
+
+```javascript
+const swap = (arr, a, b) => {
+	let tmp = arr[a];
+	arr[a] = arr[b];
+	arr[b] = tmp;
+}
+
+const downHeap = (arr, left, right) => {
+	let temp = arr[left];
+	let child;
+	let parent;
+
+	for (parent = left; parent < Math.floor((right + 1) / 2); parent = child) {
+		let cl = parent * 2 + 1;
+		let cr = cl + 1;
+		child = (cr <= right && arr[cr] > arr[cl] ? cr : cl);
+		if (temp >= arr[child])
+			break;
+		arr[parent] = arr[child];
+	}
+	arr[parent] = temp;
+}
+
+const heapSort = (arr, num) => {
+	for (let i = Math.floor((num - 1) / 2); i >= 0; i--) {
+		downHeap(arr, i, num - 1);
+	}
+	for (let i = num - 1; i > 0; i--) {
+		swap(arr, 0, i);
+		downHeap(arr, 0, i - 1);
+	}
+}
+
+let arr = [1, 7, 3, 9, 2, 5, 8];
+heapSort(arr, 7)
+console.log(arr);
+// [ 1, 2, 3, 5, 7, 8, 9 ]
+
+```
+
+
+
+## 06-9. 도수 정렬
+
+> 요소의 대소 관계를 판단하지 않고 빠르게 정렬할 수 있는 알고리즘
+
+
+
+```javascript
+const fSort = (a, n, max) => {
+	let f = [];
+	let b = [];
+
+	for (let i = 0; i < n; i++) f[a[i]]++;
+	for (let i = 1; i <= max; i++) f[i] += f[i - 1];
+	for (let i = n - 1; i >= 0; i--) b[--f[a[i]]] = a[i];
+	for (let i = 0; i < n; i++) a[i] = b[i];
+}
+
+let arr = [1, 7, 3, 9, 2, 5, 8];
+let max = arr[0];
+for (let i = 1; i < 7; i++) {
+	if (arr[i] > max) max = arr[i];
+}
+fSort(arr, 7, max);
+console.log(arr);
+// [ 1, 2, 3, 5, 7, 8, 9 ]
+
+```
 
