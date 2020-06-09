@@ -1,3 +1,7 @@
+- 처음 올린 문제가 정렬과는 조금 거리가 있는거 같아 문제를 하나 더 추가했습니다.
+___
+___
+## BOJ #2108 
 ### 문제접근
 - 산술평균, 중앙값, 최빈값, 범위를 구해야 하는 문제입니다.
 - 산술평균 : 배열의 요소 전체를 더한 후 배열의 길이로 나눠서 구했습니다. ``` Math.round(sum / arr.length);```
@@ -142,3 +146,157 @@ console.log(range);
 ___
 ### 제출 결과
 ![](https://images.velog.io/images/yujo/post/4593bbe4-147e-4f2b-bb61-76e283de2e8c/image.png)
+___
+## BOJ #1181 단어 정렬
+### 문제접근
+- 세가지 조건이 명시되어 있습니다.
+  - 길이가 짧은 것부터
+  - 길이가 같으면 사전순으로
+  - 중복되는 요소는 제거
+- 해당 조건들을 생각하며 코드를 작성했습니다.
+- 중복되는 요소를 제거하고 정렬을 편하게 하기 위해 ```Map```을 사용해 ```key = 단어```, ```value = 단어의 길이```를  ```Map```에 아래와 같이 담아줬습니다.
+```javascript
+for (let i = 0; i < input.length; i++) {
+  map.set(input[i], input[i].length);
+}
+```
+- 그 후 ```Map```을 아래와 같이 정렬해줬습니다. 
+```javascript
+const sortedMap = new Map(
+  [...map.entries()].sort((x, y) => {
+    if (x[1] === y[1]) {
+      let i = 0;
+      while (1) {
+        if (x[0][i] !== y[0][i]) {
+          return x[0][i] > y[0][i] ? 1 : -1;
+        }
+        i++;
+      }
+    }
+    return x[1] - y[1];
+  })
+);
+```
+- 마지막으로 정렬한 코드를 ```배열(arr)```에 담아 문제에서 요구하는대로 출력해줬습니다
+```javascript
+const arr = [...sortedMap.keys()];
+
+for (let i = 0; i < arr.length; i++) {
+  console.log(arr[i]);
+}
+```
+___
+### 새로 배운 점
+#### [JS]"..." 문법
+- Javascript에서 "..."은 구조 분해 할당이라고 불립니다.
+- 배열이나 객체의 속성을 해제하여 그 값을 개별 변수에 담을 수 있게 해줍니다. 아래는 MDN공식 문서입니다.
+  - [[MDN]구조 분해 할당](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+```javascript
+// 맵 선언
+const testMap = new Map();
+
+// 맵 초기화
+testMap
+  .set("Hello", 123)
+  .set("World", 567)
+  .set("This", 1231)
+  .set("is", 123123)
+  .set("testMap", 167890);
+
+// 맵 출력
+console.log(testMap);
+
+// 그냥 출력했을 때 출력값
+Map(5) {
+  'Hello' => 123,
+  'World' => 567,
+  'This' => 1231,
+  'is' => 123123,
+  'testMap' => 167890
+}
+
+// 맵 구조분해 할당 후 출력, 배열 형태로 리턴된다.
+console.log([...testMap]);
+
+// 구조분해 할당 후 출력값
+[
+  [ 'Hello', 123 ],
+  [ 'World', 567 ],
+  [ 'This', 1231 ],
+  [ 'is', 123123 ],
+  [ 'testMap', 167890 ]
+]
+
+// "..."을 사용하면 아래와 같이 인덱스로도 접근이 가능합니다.
+console.log([...testMap][0]);
+> [ 'Hello', 123 ]
+
+console.log([...testMap][0][0]);
+> Hello
+
+console.log([...testMap][0][1]);
+> 123
+```
+___
+### 정답 코드
+```javascript
+// BOJ JS input
+// BOJ JS input
+
+const fs = require("fs");
+const { match } = require("assert");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+
+// test code
+
+// const input = [
+//   "13",
+//   "but",
+//   "i",
+//   "wont",
+//   "hesitate",
+//   "no",
+//   "more",
+//   "no",
+//   "more",
+//   "it",
+//   "cannot",
+//   "wait",
+//   "im",
+//   "yours",
+// ];
+
+input.shift();
+const map = new Map();
+
+for (let i = 0; i < input.length; i++) {
+  map.set(input[i], input[i].length);
+}
+
+const sortedMap = new Map(
+  [...map.entries()].sort((x, y) => {
+    if (x[1] === y[1]) {
+      let i = 0;
+      while (1) {
+        if (x[0][i] !== y[0][i]) {
+          return x[0][i] > y[0][i] ? 1 : -1;
+        }
+        i++;
+      }
+    }
+    return x[1] - y[1];
+  })
+);
+
+const arr = [...sortedMap.keys()];
+
+for (let i = 0; i < arr.length; i++) {
+  console.log(arr[i]);
+}
+
+```
+___
+### 제출 결과
+![](https://images.velog.io/images/yujo/post/4593bbe4-147e-4f2b-bb61-76e283de2e8c/image.png)
+___
+
