@@ -53,3 +53,92 @@ function solution(files) {
 }
 ```
 
+
+
+
+
+## 🎯 단어 선택
+
+```javascript
+let fs = require('fs');
+let input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+let answer = input;
+answer.sort((a, b) => {
+	let al = a.length;
+	let bl = b.length;
+	if (al < bl)
+		return -1;
+	else if (al > bl)
+		return 1;
+	else
+		return a.localeCompare(b)
+})
+for (let i = 0; i < answer.length; i++) {
+	if (isNaN(answer[i]) && answer[i] != answer[i + 1])
+		console.log(answer[i]);
+}
+```
+
+
+
+
+
+## 🎯 가장 큰 수
+
+```javascript
+function solution(numbers) {
+    numbers.sort((a, b) => {
+        const ab = Number(a.toString() + b.toString());
+        const ba = Number(b.toString() + a.toString());
+        if (ab > ba)
+            return -1;
+        else if (ab < ba)
+            return 1;
+        else
+            return 0;
+    });
+    let answer = [];
+    while (numbers[0] == "0")
+        numbers.shift();
+    if (numbers.length == 0)
+        answer.push("0");
+    for (let i = 0; i < numbers.length; i++) {
+        answer.push(numbers[i]);
+    }
+    return answer.join("");
+}
+```
+
+
+
+## 🎯 75. Sort Colors
+
+```javascript
+var swap = (arr, a, b) => {
+    let temp = arr[a];
+    arr[a] = arr[b];
+    arr[b] = temp;
+}
+var sortColors = function(nums) {
+    let low = -1;
+    let high = nums.length;
+    let mid = 0;
+    let num = 0;
+    while (mid < high) {
+        if (nums[mid] == "0") {
+            low += 1;
+            swap(nums, low, mid);
+            mid += 1;
+        } else if (nums[mid] == "2") {
+            high -= 1;
+            swap(nums, high, mid);
+        } else {
+            console.log("1")
+            mid += 1;
+        }
+        num += 1;
+    }
+    return nums;
+};
+```
+
