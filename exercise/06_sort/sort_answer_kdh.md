@@ -147,3 +147,125 @@ string solution(vector<int> numbers) {
     return answer;
 }
 ```
+
+#### H-index
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+int solution(vector<int> citations) {
+    int answer = 0;
+	int i;
+	sort(citations.begin(), citations.end());
+	for (i = citations.size() - 1; i >= 0; i--)
+	{
+		if (citations.size() - i >= citations[i])
+		{
+			answer = citations[i];
+			break ;
+		}
+	}
+	if (i == citations.size() - 1)
+		return answer;
+	while (answer < citations[i + 1] - 1 && citations.size() - i - 1 >= answer + 1)
+		answer++;
+    return answer;
+}
+```
+
+#### 단어 정렬
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+bool sort_dict(string a, string b)
+{
+	int i;
+
+	i = 0;
+	while (a[i] != 0 && b[i] != 0)
+	{
+		if (a[i] != b[i])
+			return a[i] < b[i];
+		i++;
+	}
+	return false;
+}
+
+bool compare(string a, string b)
+{
+	if (a.size() == b.size())
+		return sort_dict(a, b);
+	else
+		return a.size() < b.size();
+}
+
+int main()
+{
+	int N;
+	string temp;
+	cin >> N;
+	vector<string> words(N);
+	for (int i = 0; i < N; i++)
+	{
+		cin >> words[i];
+	}
+	sort(words.begin(), words.end(), compare);
+
+	// cout << "\n";
+	for (int i = 0; i < N; i++)
+	{
+		if (i != N - 1 && words[i].compare(words[i + 1]) == 0)
+			continue ;
+		cout << words[i] << "\n";
+	}
+	return 0;
+}
+```
+
+#### Sort Colors
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int one, zero, two;
+		zero = -1;
+		one = 0;
+		two = nums.size();
+		
+		while (one < two)
+		{
+			if (nums[one] == 1)
+				one++;
+			else if (nums[one] == 0)
+			{
+				zero++;
+				swap(nums[one], nums[zero]);
+				one++;
+			}
+			else
+			{
+				two--;
+				swap(nums[one], nums[two]);
+			}
+		}
+    }
+};
+
+int main()
+{
+	Solution *sol = new Solution;
+	vector<int> nums = {2, 0 ,2 ,1, 1, 0};
+	sol->sortColors(nums);
+	// swap(nums[0], nums[1]);
+	for (auto t : nums)
+	{
+		cout << t << " ";
+	}
+}
