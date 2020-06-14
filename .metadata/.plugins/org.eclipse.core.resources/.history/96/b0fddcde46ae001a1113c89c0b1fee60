@@ -1,0 +1,29 @@
+package string_wordsubsets_psh;
+
+import java.util.*;
+
+class Solution {
+    public List<String> wordSubsets(String[] A, String[] B) {
+        List<String> result = new ArrayList<String>();
+        
+        for (String a : A) {
+        	boolean is_substr = false;
+        	for (String b : B) {
+        		for (int i = 0; i < b.length(); i++) {
+        			if (a.contains(Character.toString(b.charAt(i))))
+        				is_substr = true;
+        			else {
+        				is_substr = false;
+        				break;
+        			}
+        			
+        		}
+        	}
+        	
+        	if (is_substr == true)
+        		result.add(a);
+        }
+        
+        return result;
+    }
+}

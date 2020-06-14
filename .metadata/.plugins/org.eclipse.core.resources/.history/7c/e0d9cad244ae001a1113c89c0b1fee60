@@ -1,0 +1,16 @@
+package string_wordsubsets_psh;
+
+import java.util.*;
+
+class Solution {
+    public List<String> wordSubsets(String[] A, String[] B) {
+        ArrayList<String> result = new ArrayList<String>();
+        
+        for (String a : A) {
+        	boolean is_substr = false;
+        	for (String b : B) {
+        		
+        	}
+        }
+    }
+}
