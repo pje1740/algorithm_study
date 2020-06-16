@@ -118,3 +118,104 @@ ana
 ```
 
 처음에 생각 못했던 케이스. 정확히는, 생각은 했는데, 중복은 스킵한다고 생각했음. 여기서 ana는 4번 나온다고 카운트하는 것이 맞다. 
+
+
+
+# 단어 압축
+
+```java
+package string_compress_jyl;
+
+import java.util.*;
+public class Solution {
+    public int solution(String s) {
+    	int group = 1;
+    	int len = s.length();
+    	
+    	while (group <= s.length() / 2) {
+    		int count = 1;
+    		boolean found_new_group = false;
+    		String part = s.substring(0, group);
+    		int sum = s.length();
+    		for (int i = 0; i < s.length(); i += group) {
+    			if (i + group * 2 > s.length()) {
+    				if (count > 1)
+    					sum += Integer.toString(count).length();
+    				break;
+    			}
+    			String next = s.substring(i + group, i + group * 2);
+    			if (part.equals(next)) {
+    				sum -= group;
+    				if (found_new_group == false) {
+    					count++;
+    					found_new_group = true;
+    				}
+    				else {
+    					count++;
+    				}
+    			}
+    			else {
+    				part = next;
+    				if (count > 1)
+    					sum += Integer.toString(count).length();
+    				found_new_group = false;
+    				count = 1;
+    			}
+    		}
+    		len = Math.min(len, sum);
+    		group++;
+    	}
+    	
+    	return len;    	
+    }
+    
+    public static void main(String[] args) {
+    	String s = "abcabcdede";
+		System.out.println(new Solution().solution(s));
+	}
+}
+```
+
+
+
+# 모음
+
+```java
+package string_vowels_yhj;
+import java.util.*;
+
+public class Solution {
+    public int maxVowels(String s, int k) {
+        int[] cpy = new int[s.length()];
+        int[] count = new int[s.length()];
+        String vowels = "aeiou";
+    	
+        for (int i = 0; i < s.length(); i++) {
+        	if (vowels.indexOf(s.charAt(i)) != -1)
+        		cpy[i] = 1;
+        }
+    	
+        int sum = 0;
+    	for (int i = 0; i < cpy.length; i++) {
+    		if (i - k < 0) {
+    			sum += cpy[i];
+    			if (i == k - 1)
+    				count[i] = sum;
+    			continue;
+    		}
+    		sum  = sum + cpy[i] - cpy[i - k];
+    		count[i] = sum;
+    	}
+    	  	
+    	return Arrays.stream(count).max().getAsInt();
+    }
+    
+    public static void main(String[] args) {
+    	String s = "tryhard";
+    	int k = 4;
+    	
+    	System.out.println(new Solution().maxVowels(s, k));
+	}
+}
+```
+
