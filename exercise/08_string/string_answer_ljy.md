@@ -96,3 +96,131 @@ function solution(s) {
 }
 ```
 
+
+
+
+
+### Maximum Number of Vowels in a Substring of Given Length
+
+- temp배열을 갱신할 때 라빈 카프 방식처럼 맨 앞 요소를 제거하고 맨 뒤에 새 요소를 추가했더니 통과했다.
+
+```javascript
+var maxVowels = function(s, k) {
+    const vowels = "aeiou";
+    let indexArr = [];
+    for (let i = 0; i < s.length; i++) {
+        if (vowels.indexOf(s[i]) !== -1)
+            indexArr.push(1);
+        else
+            indexArr.push(0);
+    }
+    let temp = indexArr.slice(0, k);
+    let max = temp.reduce((a, b) => a + b, 0);
+    for (let j = 1; j < indexArr.length - k + 1; j++) {
+        temp.shift();
+        temp.push(indexArr[k + j - 1]);
+        let tmpMax = temp.reduce((a, b) => a + b, 0);
+        if (max < tmpMax)
+            max = tmpMax;
+    }
+    return max;
+};
+```
+
+
+
+
+
+### Word Subsets
+
+- B의 개수가 많아질 때 런타임 에러가 나서 소현님께 여쭤보니 B를 별도로 가공하여 하나의 배열로 만드는 로직이 필요하다고 하셔서 추가했다.
+
+> Runtime: 228 ms, faster than 84.78% of JavaScript online submissions for Word Subsets.
+>
+> Memory Usage: 56.7 MB, less than 67.50% of JavaScript online submissions for Word Subsets.
+
+```javascript
+var wordSubsets = function(A, B) {
+    let bArr = new Array(26).fill(0);
+    B.forEach(b => {
+        let tempArr = new Array(26).fill(0);
+        for (let i = 0; i < b.length; i++) {
+            let index = (b[i].charCodeAt(0) - "a".charCodeAt(0));
+            tempArr[index] += 1;
+        }
+        for (let j = 0; j < 26; j++) {
+            bArr[j] = Math.max(bArr[j], tempArr[j]);  
+        }
+        tempArr.fill(0);
+    })
+    let answer = [];
+    for (let a of A) {
+        let aTempArr = new Array(26).fill(0);
+        let isMatch = true;
+        for (let k = 0; k < a.length; k++) {
+            let aIndex = (a[k].charCodeAt(0) - "a".charCodeAt(0));
+            aTempArr[aIndex] += 1;
+        }
+        if (isMatch == false)
+            continue;
+        for (let j = 0; j < 26; j++) {
+            if (bArr[j] > aTempArr[j]){
+                isMatch = false;
+                break ;
+            }
+        }
+        if (isMatch == true)
+            answer.push(a);
+    }
+    return answer;
+};
+```
+
+
+
+### 가사 검색
+
+- 효율성 1,2,3번에서 틀리는데, 질문하기에서 확인해보니 선형 구조는 안되고 트리 구조로 짜야 한대서 쿨하게 포기했다.
+
+```javascript
+function solution(words, queries) {
+    var answer = [];
+    for (let query of queries) {
+        const querLen = query.length;
+        const isStart = (query[0] === '?') ? false : true;
+        const querTrimLen = query.replace(/\?/gi, '').length;
+        let result = 0;
+        
+        for (let word of words) {
+            const wordLen = word.length;
+            if (querLen !== wordLen) {
+                continue ;
+            }
+            let count = 0;
+            if (isStart === true) {
+                for (let i = 0; i < querTrimLen; i++) {
+                    if (word[i] == query[i]) {
+                        count++;
+                    } else {
+                        break ;
+                    }
+                }
+            } else {
+                for (let i = word.length - 1; i > word.length - querTrimLen - 1; i--) {
+                    if (word[i] == query[i]) {
+                        count++;
+                    } else {
+                        break ;
+                    }
+                }
+            }
+            if (count == querTrimLen)
+                result += 1;
+        }
+        answer.push(result);
+        result = 0;
+    }
+    return answer;
+}
+```
+
