@@ -208,12 +208,8 @@ ___
   - [라빈 카프(Rabin-Karp) 문자열 매칭 알고리즘 - 동빈나님 유튜브](https://www.youtube.com/watch?v=kJJQJDsjXc8)
 
 ___
-
 ### 간단한 방식
-
-- Rabin-Karp 알고리즘이 빠른 이유는 브루트 포스 방식처럼 전체 배열을 하나씩 비교하지 않고 해시값이 같을 때만 다시 확인을 하기 때문입니다.
-- 그렇기 때문에 저는 해시값을 사용하지 않고 Javscript 배열의 특성을 이용해 전체 문자열을 가져가면서 앞에 한 글자를 빼고 뒤에 한글자를 더하는 식으로 전체 문자열을 비교하는 코드를 작성해 봤습니다.
-
+- Rabin-Karp를 이해하기 위해 전체적인 로직을 해시값 없이 구현해 봤습니다.
 ```javascript
 function rabinKarp(text, word) {
   const textHash = [];
@@ -240,49 +236,42 @@ function rabinKarp(text, word) {
   return -1;
 }
 ```
-
 ### 해시 값을 이용한 방식
-
-- 위와 같은 간단한 방식으로 작성하며 라빈-카프 알고리즘의 동작 원리를 이해한 뒤 해시 값을 사용해 아래와 같이 작성했습니다.
-
+- 이후 작동원리를 이용해 해시값을 이용해 라빈 카프를 작성했습니다.
 ```javascript
 function rabinKarp(text, word) {
   let textHash = 0;
   let wordHash = 0;
-  // 특정 소수를 사용하는 이유는 곱 했을 떄 다른 패턴에서 같은 값이 나올 확률을 낮추기 위함입니다.
-  // 소수에 제곱을 하는 방식으로 한다면 더욱 안정성이 높아집니다.
-  const prime = 3; 
+  let power = 1;
 
   for (let i = 0; i < text.length; i++) {
     if (i == 0) {
-      // text와 word Hash에 초기값을 설정합니다.
       for (let j = 0; j < word.length; j++) {
-        textHash += text.charCodeAt(j) * prime;
-        wordHash += word.charCodeAt(j) * prime;
+        textHash += text.charCodeAt(text.length - 1 - j) * power;
+        wordHash += word.charCodeAt(word.length - 1 - j) * power;
+        if (j < text.length - 1) {
+          power *= 2;
+        }
       }
-      // 만약 text의 이전 해시값이 word의 해시값과 달랐다면
-      // text첫 글자의 해시값을 제거하고 다음 글자의 해시값을 더해줍니다.
     } else {
-      textHash -= text.charCodeAt(i) * prime;
-      textHash += text.charCodeAt(i + word.length - 1) * prime;
+      textHash =
+        2 * (textHash - text.charCodeAt(i - 1) * power) +
+        text[word.length - 1 - i];
     }
-    // 만약 text와 word의 해시값이 일치했다면 word의 길이만큼 반복문을 돌며 정확이 일치하는지 확인합니다.
     if (textHash === wordHash) {
       let find = true;
-      // 한 글자라도 다르다면 find는 false가 되고 반복문은 종료됩니다.
       for (let j = i; j < word.length; j++) {
         if (text[j] !== word[j]) {
           find = false;
           break;
         }
       }
-      // 반복문이 끝난 후 모든 글자가 일치하는 것을 확인 후 현재 인덱스 값을 반환해줍니다.
       if (find) {
         return i;
       }
     }
   }
-  // text의 길이만큼 반복했을 때도 찾지 못 했다면 -1을 return해 실패를 알립니다.
+
   return -1;
 }
 
@@ -297,6 +286,5 @@ console.log(rabinKarp("asdfasdfasfasdfasdfasdfadsfaeeee", "aeeeee"));
 console.log(rabinKarp("asdfasdfasfasdfasdfasdfadsfaeeee", "asdf"));
 > 0
 ```
-
 ---
 
