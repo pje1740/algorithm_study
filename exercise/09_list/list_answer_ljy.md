@@ -26,3 +26,98 @@ var deleteDuplicates = function(head) {
 };
 ```
 
+
+
+# ⛳️ Remove Zero Sum Consecutive Nodes from Linked List
+
+Runtime: 284 ms, faster than 5.80% of JavaScript online submissions for Remove Zero Sum Consecutive Nodes from Linked List.
+
+Memory Usage: 47 MB, less than 6.82% of JavaScript online submissions for Remove Zero Sum Consecutive Nodes from Linked List.
+
+```javascript
+var removeZeroSumSublists = function(head) {
+    let node = head;
+    let before = new ListNode(null, head);
+    let arr = [];
+    let count = 0;
+    while (node) {
+        arr.push(0);
+        count++;
+        for (let i in arr) {
+            arr[i] = arr[i] + node.val;
+        }
+        let idx = arr.lastIndexOf(0);
+        if (idx !== -1) {
+            arr = arr.slice(0, idx);
+            let start = before;
+            while (idx > 0) {
+                start = start.next;
+                idx--;
+            }
+            start.next = node.next;
+        } 
+        node = node.next;
+    }
+    return before.next;
+};
+```
+
+
+
+# ⛳️ 에디터
+
+https://www.acmicpc.net/problem/1406
+
+- 예시는 통과하는데 제출하면 틀린다.
+- 시간날 때 예외 케이스 찾아서 풀 예정
+
+```javascript
+// 백준
+// let fs = require('fs');
+// let input = fs.readFileSync('dev/stdin').toString().trim().split('\n');
+
+// 테스트용
+let input = [];
+require("readline")
+	.createInterface(process.stdin, process.stdout)
+	.on("line", function(line) {
+	input.push(line.toString().split("\n"));
+}).on("close", function(line) {
+	let str = input.shift().toString();
+	let num = input.shift().toString();
+	let idx = inpLen = str.length;
+	let answer = input.reduce((acc, cur) => {
+		let accLen = acc.length;
+		let target = cur[0];
+		switch (target) {
+			case "L" :
+				if (idx !== 0) {
+					idx -= 1;
+				}
+				break;
+			case "D" :
+				if (idx !== accLen) {
+					idx += 1;
+				}
+				break;
+			case "B" :
+				if (idx !== 0) {
+					acc = acc.slice(0, idx - 1) + acc.slice(idx);
+					idx--;
+				}
+				break;
+			default :
+				let charactor = target.slice(-1);
+				acc = acc.slice(0, idx) + charactor + acc.slice(idx);
+				idx++;
+				break;
+		}
+		return (acc);
+	}, str);
+	console.log(answer);
+})
+
+```
+
+
+
