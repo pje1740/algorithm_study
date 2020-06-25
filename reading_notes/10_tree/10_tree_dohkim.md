@@ -206,4 +206,4 @@ successor를 기준으로 삭제 과정은 다음과 같다.
 
 참고 링크:
 
-[https://ratsgo.github.io/data%20structure&algorithm/2017/10/21/tree/](
+[https://ratsgo.github.io/data%20structure&algorithm/2017/10/21/tree/]
