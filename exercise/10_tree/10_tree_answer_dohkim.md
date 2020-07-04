@@ -1,3 +1,42 @@
+### Populating Next Right Pointers in Each Node
+
+```c++
+queue<pair<int, Node *>> q;
+
+class Solution {
+public:
+    void    BFS(Node* &root, int level)
+    {
+        Node* temp = NULL;
+
+        if (root != NULL)
+        {
+            if (root->left != NULL)
+                q.push(make_pair(level + 1, root->left));
+            if (root->right != NULL)
+                q.push(make_pair(level + 1, root->right));
+            if (q.front().first != level)
+            {
+                root->next = NULL;
+                level += 1;
+            }
+            else
+                root->next = q.front().second;
+            if (!q.empty())
+            {
+                temp = q.front().second;
+                q.pop();
+                BFS(temp, level);
+            }
+        }
+    }
+    Node* connect(Node* root) {
+        BFS(root, 0);
+        return root;
+    }
+};
+```
+
 ### 길찾기 게임
 
 처음에는 c++의 map이 이진탐색트리로 구현이 돼있다고 해서 활용하려고 시도했는데 내부구현이 그럴 뿐이고 map자체를 트리처럼 순회하거나 사용하기에는 어려움이 있었다.
