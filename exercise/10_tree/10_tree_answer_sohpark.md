@@ -108,3 +108,105 @@ public class Solution {
 - 문제를 보면 노드가 꼭 상단 노드가 왼쪽에 적힌 게 아니다보니, 처음에 어레이리스트를 만들 때 양방향으로 연결지어 주는 것이 중요하다. 어차피 1부터 시작할 거기 때문에, 윗단부터 보게 되니까 양방향으로 연결하더라도 1과 더 가까운 것이 먼저 체크되고, 그럼 반대로 접근할 경우에는 이미 visited에서 방문한 것으로 체크되어있기 때문에 무시할 수 있다. 
 - 결국 방법은, 트리가 아니라 리스트의 리스트로 구현한 것이다. 각각의 노드의 값이 리스트의 리스트의 인덱스로 관리가 되고, 해당 리스트에 그 노드와 연결된 노드들의 값을 append하는 형식으로 관리한다. 
 
+
+
+# BST: same tree
+
+```java
+package BST_sametree_yujo;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Solution {
+    public boolean getSubtree(TreeNode p, TreeNode q) {
+        boolean result = false;
+        boolean left = false;
+        boolean right = false;
+
+        if (p == null && q == null)
+            return true;
+        else if (p == null || q == null)
+            return false;
+        else if (p == null || q == null)
+            return false;
+        else if (p.val != q.val)
+            return false;
+
+        left = getSubtree(p.left, q.left);
+        right = getSubtree(p.right, q.right);
+        return left & right;
+    }
+
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        return getSubtree(p, q);
+    }
+}
+```
+
+- 자꾸 한번의 재귀 안에서 루트만 보면 되는데 left, right를 다 보고 하려고 해서;; 꼬이고 꼬였다. 
+
+
+
+# BST: Kth element
+
+```java
+import java.util.Stack;
+
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+
+        while (true) {
+            while (root != null) {
+                stack.add(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            if(--k == 0)
+                return root.val;
+            root = root.right;
+        }
+    }
+}
+```
+
+- 재귀 대신 반복문으로도 충분히 구현할 수 있음
+- 원리는, 우선 왼쪽편이 있든 없든 왼쪽을 순차적으로 넣어둔다. 스택으로 구현하면, 맨 마지막 레벨이 제일 먼저 나올 텐데, 그 값을 체크하고 k번째가 아니면 그것의 오른쪽 자식을 본다. 근데 오른쪽 자식이 없는 경우, 어차피 pop 구문에서 root가 그 이전 레벨의 왼편 노드로 바뀌기 때문에 이런 식으로 아래서부터 순차적으로 올라올 수 있다. 
+
+
+
+# BST : Populating Next Right Pointers in Each Node
+
+```java
+package Tree_Perfectpopulate_dohkim;
+
+public class Solution {
+    public Node connect(Node root) {
+        Node original_root = root;
+        Node cur = root;
+        if (root == null || root.left == null)
+            return root;
+        cur.next = null;
+
+        while (cur != null) {
+            while (root != null) {
+                if (root.next == null) {
+                    root.left.next = root.right;
+                    root.right.next = null;
+                    break;
+                }
+                root.left.next = root.right;
+                root.right.next = root.next.left;
+                root = root.next;
+            }
+            root = cur;
+            cur = cur.left;
+        }
+        return original_root;
+    }
+}
+```
+
+
+
