@@ -169,20 +169,6 @@ private void addNode(Node<K,V> node, K key, V data) {
    - 옮긴 노드에 자식이 없으면 '자식 노드가 없는 노드의 삭제 순서'에 따라 노드륵 삭제한다.
    - 자식이 1개만 있다면 '자식 노드가 1개 있는 노드의 삭제 순서'에 따라 노드를 삭제한다. 
 
-```java
-public boolean remove(K key) {
-  Node<K,V> p = root;
-  Node<K,V> parent = null;
-  boolean isLeftChild = true;
-  
-  while (true) {
-    if (p == null)
-      return false;
-    int cond = comp
-  }
-}
-```
-
 
 
 
