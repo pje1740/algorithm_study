@@ -23,8 +23,6 @@ var kthSmallest = function(root, k) {
 
 ```
 
-
-
 ## 🤔 Same Tree
 
 ```javascript
