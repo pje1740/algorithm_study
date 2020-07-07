@@ -17,6 +17,8 @@ function solution(participant, completion) {
 
 ## ⛳️ 위장
 
+- 공식을 아는 것이 중요 포인트.
+
 ```javaScript
 function solution(clothes) {
     var answer = 1;
@@ -32,5 +34,45 @@ function solution(clothes) {
         answer *= value;
     })
     return answer - 1;
+}
+```
+
+## ⛳️ 베스트앨범
+
+- 너무 짜치는(?) 일이 많았다...
+
+```javaScript
+function solution(genres, plays) {
+    let answer = [];
+    let allList = new Map();
+    genres.forEach((val, idx) => {
+        if (allList.has(val)) {
+            allList.set(val, allList.get(val) + plays[idx]);
+        } else {
+            allList.set(val, plays[idx]);
+        }
+    })
+    let maxList = [...allList].sort((a, b) => {
+        return b[1] - a[1];
+    })
+    let allGenre = [];
+    maxList.forEach((val) => {
+        let item = [];
+        genres.forEach((x, idx) => {
+            if (val[0] == x) {
+                item.push([x, plays[idx], idx]);
+            }
+        });
+        allGenre.push(item);
+    })
+    allGenre.forEach((val) => {
+        val.sort((a, b) => b[1] - a[1]);
+        for (let i = 0; i < 2; i++) {
+            if (val[i]) {
+                answer.push(val[i][2]);
+            }
+        }
+    })
+    return answer;
 }
 ```
