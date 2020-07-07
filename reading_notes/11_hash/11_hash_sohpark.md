@@ -140,9 +140,37 @@ public class ChainHash<K,V> {
 }
 ```
 
+### 오픈 주소법
 
+오픈 주소법은 충돌이 발생했을 때 재해시(rehashing)를 수행하여 비어 있는 버킷을 찾아내는 방법으로, 닫힌 해시법(closed hashing)이라고도 한다. 빈 버킷을 만날 때까지 재해시를 여러 번 반복하므로 선형 탐사법(linear probing)이라고도 한다. 
 
+**요소 삭제**
 
+이렇듯 재해시에 의해 해시함수를 한번 돌렸을 때의 해시코드의 위치에 가있지 않을 수가 있다. 그래서 최초부터 아무것도 채워지지 않은 채 비워진 버킷인지, 아니면 무언가 채워져있다가 없어진 버킷인지 확인할 필요가 있다. 삭제된 바가 있는 버킷이라면 설령 그곳이 비었더라도 재해시를 반복하여 채워넣은 값을 찾아 지워줘야 하기 때문이다. 
+
+```
+private Bucket<k,V> searchNode(K key) {
+  int hash = hashValue(key);
+  Bucket<K,V> p = table[hash];
+  
+  for (int i = 0; p.stat != Status.Empty && i <size; i++) {
+    if (p.stat == Status.OCCUPIED && p.getKey().equals(key))
+      return p;
+    hash = rehashValue(hash);
+    p = table[hash];
+  }
+  return null;
+}
+
+public int remove(K key) {
+  Bucket<K,V> p = searchNode(key);
+  if (p == null)
+    return 1;
+  
+  p.setStat(Status.DELETED);
+  return 0;
+}
+```
 
 
 
